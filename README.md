@@ -1,9 +1,9 @@
 # Gun_Shop
 
-##Bussiness
+## Bussiness
 This is a online website to gun worldwide
 
-##Feature
+## Feature
 * For customers:
   1. View products
   2. View categories
