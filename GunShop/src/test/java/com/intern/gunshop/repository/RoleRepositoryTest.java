@@ -25,4 +25,5 @@ public class RoleRepositoryTest {
 		
 		assertThat(savedRole.getRole_id()).isGreaterThan(0);
 	}
+
 }
