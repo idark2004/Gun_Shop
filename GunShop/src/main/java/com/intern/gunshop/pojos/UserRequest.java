@@ -1,4 +1,4 @@
-package Pojos;
+package com.intern.gunshop.pojos;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -10,5 +10,4 @@ public class UserRequest {
 	public LocalDate birth_date;
 	public Timestamp created_date;
 	public boolean user_status;
-	public Integer role_id;
 }

@@ -7,10 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.intern.gunshop.entity.Role;
 import com.intern.gunshop.entity.Users;
+import com.intern.gunshop.pojos.UserRequest;
 import com.intern.gunshop.repository.RoleRepository;
 import com.intern.gunshop.repository.UserRepository;
-
-import Pojos.UserRequest;
 
 @Service
 public class UserService {

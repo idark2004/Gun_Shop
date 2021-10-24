@@ -2,6 +2,7 @@ package com.intern.gunshop.entity;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,6 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Users {
@@ -22,11 +26,14 @@ public class Users {
 	private String pass_word;
 	private LocalDate birth_date;
 	private Timestamp created_date;
-	private boolean user_status;
+	private boolean user_status;	
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "role_id")
 	private Role role;
+	
+	@OneToMany(mappedBy = "user")	
+	private Set<Gun_Rating> gun_rating;
 
 	public Users() {
 	}
@@ -94,5 +101,15 @@ public class Users {
 	public void setPass_word(String pass_word) {
 		this.pass_word = pass_word;
 	}
+
+	@JsonIgnore
+	public Set<Gun_Rating> getGun_rating() {
+		return gun_rating;
+	}
+
+	public void setGun_rating(Set<Gun_Rating> gun_rating) {
+		this.gun_rating = gun_rating;
+	}
+		
 
 }

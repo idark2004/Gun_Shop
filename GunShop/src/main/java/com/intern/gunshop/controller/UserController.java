@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.intern.gunshop.entity.Users;
 import com.intern.gunshop.exception.ApiException;
 import com.intern.gunshop.exception.ApiRequestException;
+import com.intern.gunshop.pojos.UserRequest;
 import com.intern.gunshop.service.UserService;
 
-import Pojos.UserRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -55,7 +55,7 @@ public class UserController {
 
 		List<Users> users = service.getUserByRoleId(role_id);
 
-		if (users.size() > 0) {
+		if (users.size() > 0) {			
 			return new ResponseEntity<List<Users>>(users, HttpStatus.OK);
 		}
 		throw new ApiRequestException("No user associate with role id: " + role_id, HttpStatus.NOT_FOUND);
