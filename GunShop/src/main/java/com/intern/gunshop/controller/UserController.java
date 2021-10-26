@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.intern.gunshop.dto.UserRequest;
 import com.intern.gunshop.entity.Users;
 import com.intern.gunshop.exception.ApiException;
 import com.intern.gunshop.exception.ApiRequestException;
-import com.intern.gunshop.pojos.UserRequest;
 import com.intern.gunshop.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;

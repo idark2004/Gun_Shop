@@ -1,4 +1,4 @@
-package com.intern.gunshop.pojos;
+package com.intern.gunshop.dto;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;

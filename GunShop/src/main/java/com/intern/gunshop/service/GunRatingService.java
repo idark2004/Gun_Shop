@@ -30,8 +30,23 @@ public class GunRatingService {
 		Users user = userRepo.findById(user_id).get();
 		LocalDateTime now = LocalDateTime.now();
 		Timestamp rated_date = Timestamp.valueOf(now);
-		Gun_Rating ratedGun = new Gun_Rating(gun, user, rated_point, rated_date);		
+		Gun_Rating ratedGun = new Gun_Rating();
+		ratedGun.setGun(gun);
+		ratedGun.setUser(user);
+		ratedGun.setRated_date(rated_date);
+		ratedGun.setRated_point(rated_point);
 		return rateRepo.save(ratedGun);
 	}
 	
+	public int averageRating(int gun_id) {
+		String result = rateRepo.averageRateOfGun(gun_id);
+		if(result == null) {
+			return 0;
+		}
+		return Integer.parseInt(result);
+	}
+	
+	public void deleteRating(Integer id) {
+		rateRepo.deleteById(id);
+	}
 }

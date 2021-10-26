@@ -23,6 +23,9 @@ public class Category {
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
 	private Set<Accessory> accessory_list;
 
+	@OneToMany(mappedBy = "category")
+	private Set<Gun> gun_list;
+
 	public Category() {
 	}
 
@@ -62,6 +65,15 @@ public class Category {
 
 	public void setAccessory_list(Set<Accessory> accessory_list) {
 		this.accessory_list = accessory_list;
+	}
+
+	@JsonIgnore
+	public Set<Gun> getGuns() {
+		return gun_list;
+	}
+
+	public void setGuns(Set<Gun> gun_list) {
+		this.gun_list = gun_list;
 	}
 
 }

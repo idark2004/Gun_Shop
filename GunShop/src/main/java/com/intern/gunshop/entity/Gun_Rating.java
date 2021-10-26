@@ -2,47 +2,32 @@ package com.intern.gunshop.entity;
 
 import java.sql.Timestamp;
 
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 
 @Entity
 public class Gun_Rating {
-	
-	@EmbeddedId
-	private Gun_Rating_Id id;
-	
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int rate_id;
+
 	@ManyToOne
-	@MapsId("gun_id")
 	@JoinColumn(name = "gun_id")
 	private Gun gun;
-	
+
 	@ManyToOne
-	@MapsId("user_id")
 	@JoinColumn(name = "user_id")
 	private Users user;
-	
-	private int rated_point;	
+
+	private int rated_point;
 	private Timestamp rated_date;
-	
-	public Gun_Rating() {}
 
-	public Gun_Rating(Gun gun, Users user, int rated_point, Timestamp rated_date) {
-		this.id = new Gun_Rating_Id(gun.getGun_id(), user.getUser_id());
-		this.gun = gun;
-		this.user = user;
-		this.rated_point = rated_point;
-		this.rated_date = rated_date;
-	}
-
-	public Gun_Rating_Id getId() {
-		return id;
-	}
-
-	public void setId(Gun_Rating_Id id) {
-		this.id = id;
+	public Gun_Rating() {
 	}
 
 	public Gun getGun() {
@@ -55,6 +40,14 @@ public class Gun_Rating {
 
 	public Users getUser() {
 		return user;
+	}
+
+	public int getRate_id() {
+		return rate_id;
+	}
+
+	public void setRate_id(int rate_id) {
+		this.rate_id = rate_id;
 	}
 
 	public void setUser(Users user) {
@@ -76,7 +69,5 @@ public class Gun_Rating {
 	public void setRated_date(Timestamp rated_date) {
 		this.rated_date = rated_date;
 	}
-	
-	
-	
+
 }

@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.intern.gunshop.dto.UserRequest;
 import com.intern.gunshop.entity.Role;
 import com.intern.gunshop.entity.Users;
-import com.intern.gunshop.pojos.UserRequest;
 import com.intern.gunshop.repository.RoleRepository;
 import com.intern.gunshop.repository.UserRepository;
 

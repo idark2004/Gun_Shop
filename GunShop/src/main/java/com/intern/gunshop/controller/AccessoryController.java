@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.intern.gunshop.dto.AccessoryRequest;
 import com.intern.gunshop.entity.Accessory;
-import com.intern.gunshop.pojos.AccessoryRequest;
 import com.intern.gunshop.service.AccessoryService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
