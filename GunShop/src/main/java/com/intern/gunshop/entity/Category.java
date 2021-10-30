@@ -2,7 +2,6 @@ package com.intern.gunshop.entity;
 
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,9 +18,6 @@ public class Category {
 	private int category_id;
 	private String category_name;
 	private String category_description;
-
-	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-	private Set<Accessory> accessory_list;
 
 	@OneToMany(mappedBy = "category")
 	private Set<Gun> gun_list;
@@ -56,15 +52,6 @@ public class Category {
 
 	public void setCategory_description(String category_description) {
 		this.category_description = category_description;
-	}
-
-	@JsonIgnore
-	public Set<Accessory> getAccessory_list() {
-		return accessory_list;
-	}
-
-	public void setAccessory_list(Set<Accessory> accessory_list) {
-		this.accessory_list = accessory_list;
 	}
 
 	@JsonIgnore

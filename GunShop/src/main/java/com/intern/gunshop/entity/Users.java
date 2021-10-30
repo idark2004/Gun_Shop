@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -22,18 +23,22 @@ public class Users {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int user_id;
 	private String user_name;
-	private String email;
+	private String email;	
 	private String pass_word;
 	private LocalDate birth_date;
 	private Timestamp created_date;
-	private boolean user_status;	
+	private boolean user_status;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "role_id")
+	@ManyToOne(cascade = CascadeType.MERGE)
+	@JoinColumn(name = "role_id", referencedColumnName = "role_id")
 	private Role role;
-	
-	@OneToMany(mappedBy = "user")	
+
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
 	private Set<Gun_Rating> gun_rating;
+
+	@OneToOne(mappedBy = "user")
+	private Cart cart;
 
 	public Users() {
 	}
@@ -102,7 +107,7 @@ public class Users {
 		this.pass_word = pass_word;
 	}
 
-	@JsonIgnore
+	
 	public Set<Gun_Rating> getGun_rating() {
 		return gun_rating;
 	}
@@ -110,6 +115,13 @@ public class Users {
 	public void setGun_rating(Set<Gun_Rating> gun_rating) {
 		this.gun_rating = gun_rating;
 	}
-		
+
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
 
 }
