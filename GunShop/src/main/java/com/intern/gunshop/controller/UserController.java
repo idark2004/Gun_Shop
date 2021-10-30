@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.intern.gunshop.dto.UserRequest;
 import com.intern.gunshop.entity.Users;
 import com.intern.gunshop.exception.ApiException;
-import com.intern.gunshop.exception.ApiRequestException;
+import com.intern.gunshop.mapper.UserMapper;
+import com.intern.gunshop.service.UserDTO;
 import com.intern.gunshop.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,72 +34,72 @@ public class UserController {
 	@Autowired
 	private UserService service;
 
+	@Autowired
+	private UserMapper mapper;
+
+	// Get List User
 	@Operation(summary = "Get all users", responses = {
-			@ApiResponse(responseCode = "200", content = 
-						@Content(schema = @Schema(implementation = Users.class), 
-						mediaType = "application/json"), 
-			description = "Return all user's information")})
+			@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Users.class), mediaType = "application/json"), description = "Return all user's information") })
 	@GetMapping()
-	public List<Users> list() {
+	public List<UserDTO> list() {
 		return service.getUserList();
 	}
 
-	
+	// Get user by Role Id
 	@Operation(summary = "Get all users based on role Id", responses = {
-			@ApiResponse(responseCode = "200", content = 
-						@Content(schema = @Schema(implementation = Users.class), 
-						mediaType = "application/json"), description = "Return all user's information"),			
-			@ApiResponse(responseCode = "404" , description = "No users found with the inputed role id",
-						content = @Content(schema = @Schema(implementation = ApiException.class), mediaType = "application/json"))})
+			@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserDTO.class), mediaType = "application/json"), description = "Return all user's information"),
+			@ApiResponse(responseCode = "404", description = "No users found with the inputed role id", content = @Content(schema = @Schema(implementation = ApiException.class), mediaType = "application/json")) })
 	@GetMapping("/role/{role_id}")
-	public ResponseEntity<List<Users>> getByRole(@PathVariable Integer role_id) {
+	public ResponseEntity<List<UserDTO>> getByRole(@PathVariable Integer role_id) {
 
-		List<Users> users = service.getUserByRoleId(role_id);
+		List<UserDTO> users = service.getUserByRoleId(role_id);
 
-		if (users.size() > 0) {			
-			return new ResponseEntity<List<Users>>(users, HttpStatus.OK);
-		}
-		throw new ApiRequestException("No user associate with role id: " + role_id, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<List<UserDTO>>(users, HttpStatus.OK);
 
 	}
 
+	// Add new User
 	@Operation(summary = "Create new user", responses = {
-			@ApiResponse(responseCode = "201", content = 
-						@Content(schema = @Schema(implementation = Users.class), 
-						mediaType = "application/json"), 
-			description = "Create new user and save to database successfully")})
+			@ApiResponse(responseCode = "201", content = @Content(schema = @Schema(implementation = UserDTO.class), mediaType = "application/json"), description = "Create new user and save to database successfully") })
 	@PostMapping()
-	public ResponseEntity<Users> add(@RequestBody UserRequest user) {
+	public ResponseEntity<UserDTO> add(@RequestBody UserRequest user) {
 		Users newUser = service.addUser(user);
-		return new ResponseEntity<Users>(newUser, HttpStatus.CREATED);
+		UserDTO dto = mapper.entityToDto(newUser);
+		dto.setRole_name(newUser.getRole().getRole_name());
+		dto.setUser_id(newUser.getUser_id());
+		return new ResponseEntity<UserDTO>(dto, HttpStatus.CREATED);
 	}
-	
+
+	//update existing user
 	@Operation(summary = "Update a user", responses = {
-			@ApiResponse(responseCode = "202", content = 
-						@Content(schema = @Schema(implementation = Users.class), 
-						mediaType = "application/json"), 
-			description = "Update user to database successfully")})
+			@ApiResponse(responseCode = "202", content = @Content(schema = @Schema(implementation = UserRequest.class), mediaType = "application/json"), description = "Update user to database successfully") })
 	@PutMapping("/{id}")
-	public ResponseEntity<Users> update(@RequestBody Users user, @PathVariable Integer id) {
-		if (service.getUser(id) != null) {
-			user.setUser_id(id);
-			Users updatedUser = service.updateUser(user);
-			return new ResponseEntity<Users>(updatedUser, HttpStatus.ACCEPTED);
-		}
-		throw new ApiRequestException("Error at update method in UserController");
+	public ResponseEntity<UserRequest> update(@RequestBody UserRequest request, @PathVariable Integer id) {			
+			UserRequest updatedUser = service.updateUser(request,id);
+			return new ResponseEntity<UserRequest>(updatedUser, HttpStatus.ACCEPTED);		
 	}
+
 	
+	//change user's status
 	@Operation(summary = "Change user's status", responses = {
 			@ApiResponse(responseCode = "202", content = 
-						@Content(schema = @Schema(implementation = Users.class), 
+						@Content(schema = @Schema(implementation = UserDTO.class), 
 						mediaType = "application/json"), 
 			description = "User's status changed successfully")})
-	@PutMapping("/{user_id}/{status}")
-	public ResponseEntity<Users> changeState(@PathVariable(name = "user_id") Integer user_id,
-												@PathVariable(name = "status") boolean status){
-		Users updateUser = service.getUser(user_id);
-		updateUser.setUser_status(status);
-		service.updateUser(updateUser);
-		return new ResponseEntity<Users>(updateUser,HttpStatus.ACCEPTED);
+	@PutMapping("/{user_id}/status")
+	public ResponseEntity<UserDTO> changeState(@PathVariable(name = "user_id") Integer user_id){
+		UserDTO updateUser = service.changeState(user_id);
+		return new ResponseEntity<UserDTO>(updateUser,HttpStatus.ACCEPTED);
+	}
+
+	
+	//get a user by user id
+	@Operation(summary = "Get a user by id", responses = {
+			@ApiResponse(responseCode = "200", content = 
+						@Content(schema = @Schema(implementation = UserDTO.class), 
+						mediaType = "application/json"))})
+	@GetMapping("/{id}")
+	public UserDTO getById(@PathVariable Integer id) {
+		return service.getUser(id);
 	}
 }

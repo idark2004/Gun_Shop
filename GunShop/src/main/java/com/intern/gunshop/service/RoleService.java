@@ -22,4 +22,8 @@ public class RoleService {
 	public Role get(Integer id) {
 		return repo.findById(id).get();
 	}
+	
+	public Role getByName(String role_name) {
+		return repo.findByRole_name(role_name);
+	}
 }
