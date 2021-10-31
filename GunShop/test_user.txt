@@ -1,0 +1,6 @@
+{
+  "user_name": "aaaa",
+  "email": "aaaa",
+  "pass_word": "aaaa",
+  "birth_date": "2021-10-31"
+}

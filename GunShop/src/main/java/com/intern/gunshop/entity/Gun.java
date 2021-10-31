@@ -3,7 +3,9 @@ package com.intern.gunshop.entity;
 import java.sql.Timestamp;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,17 +30,17 @@ public class Gun {
 	private Timestamp added_date;
 	private Timestamp modified_date;
 
-	@OneToMany(mappedBy = "gun")
+	@OneToMany(mappedBy = "gun",cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	private Set<Gun_Rating> gun_rating;
 	
-	@OneToMany(mappedBy = "colored_gun")
+	@OneToMany(mappedBy = "colored_gun",cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	private Set<Gun_Color> color_list;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "ammo_id")
 	private Ammo ammo;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "category_id")
 	private Category category;
 

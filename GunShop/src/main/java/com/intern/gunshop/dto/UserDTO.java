@@ -1,7 +1,9 @@
-package com.intern.gunshop.service;
+package com.intern.gunshop.dto;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,5 +21,5 @@ public class UserDTO {
 	private LocalDate birth_date;
 	private Timestamp created_date;
 	private boolean user_status;
-	private String role_name;
+	private List<String> role_name = new ArrayList<String>();
 }

@@ -1,4 +1,4 @@
-package com.intern.gunshop.dto;
+package com.intern.gunshop.request;
 
 import java.time.LocalDate;
 
