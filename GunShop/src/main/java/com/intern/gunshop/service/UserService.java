@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -39,6 +41,7 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	//load user for authorization
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		Users user = repo.findByEmail(email);
@@ -54,12 +57,14 @@ public class UserService implements UserDetailsService {
 	}
 
 	// get all user
+	@Transactional
 	public List<UserDTO> getUserList() {
 		List<Users> userList = repo.findAll();
 		List<UserDTO> dtoList = new ArrayList<UserDTO>();
 		for (Users user : userList) {
 			UserDTO dto = mapper.entityToDto(user);
 			addRoleNameToDTO(user, dto);
+			dtoList.add(dto);
 		}
 		return dtoList;
 	}
@@ -77,7 +82,7 @@ public class UserService implements UserDetailsService {
 		newUser.setCreated_date(created_date);
 		newUser.setUser_status(true);
 		newUser.getRoles().add(role);
-		newUser = repo.save(newUser);
+		repo.save(newUser);
 		UserDTO dto = mapper.entityToDto(newUser);
 		addRoleNameToDTO(newUser, dto);
 		dto.setUser_id(newUser.getUser_id());
@@ -85,12 +90,12 @@ public class UserService implements UserDetailsService {
 	}
 
 	// update an existing user
-	public UserRequest updateUser(UserRequest request, Integer user_id) {
+	public UserDTO updateUser(UserRequest request, Integer user_id) {
 		Users savedUser = repo.findById(user_id).get();
 		savedUser = mapper.requestToEntity(request, savedUser);
 		repo.save(savedUser);
-		request = mapper.entityToRequest(savedUser);
-		return request;
+		UserDTO dto = mapper.entityToDto(savedUser);
+		return dto;
 	}
 
 	// get a user based on role id
@@ -130,19 +135,24 @@ public class UserService implements UserDetailsService {
 	}
 
 	// Add user's role
+	@Transactional
 	public UserDTO addRoleToUser(Integer user_id, String role_name) {
 		Users user = repo.findById(user_id).get();
 		Role role = roleRepo.findByRole_name(role_name);
 		user.getRoles().add(role);
-		repo.save(user);
+//		repo.save(user);
 		UserDTO dto = mapper.entityToDto(user);
 		addRoleNameToDTO(user, dto);
 		return dto;
 	}
 	
 	//Get user by email
-	public Users getByEmail(String email) {
-		return repo.findByEmail(email);
+	@Transactional
+	public UserDTO getByEmail(String email) {
+		Users user = repo.findByEmail(email);
+		UserDTO dto = mapper.entityToDto(user);
+		addRoleNameToDTO(user, dto);
+		return dto;
 	}
 	
 	// mapping role_name from entity to dto

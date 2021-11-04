@@ -17,7 +17,6 @@ public class UserDTO {
 	private int user_id;
 	private String user_name;
 	private String email;
-	private String pass_word;
 	private LocalDate birth_date;
 	private Timestamp created_date;
 	private boolean user_status;

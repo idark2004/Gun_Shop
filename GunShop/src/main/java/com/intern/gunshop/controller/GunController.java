@@ -12,10 +12,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.intern.gunshop.dto.GunRequest;
-import com.intern.gunshop.entity.Gun;
+import com.intern.gunshop.dto.GunDTO;
+import com.intern.gunshop.request.GunRequest;
 import com.intern.gunshop.service.GunService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -26,18 +30,27 @@ public class GunController {
 	@Autowired
 	private GunService service;
 	
+	//add new gun
+	@Operation(summary = "Add new gun", responses = {
+			@ApiResponse(responseCode = "201", content = @Content(schema = @Schema(implementation = GunDTO.class), mediaType = "application/json")) })
 	@PostMapping
-	public ResponseEntity<Gun> add(@RequestBody GunRequest request){
-		return new ResponseEntity<Gun>(service.addGun(request),HttpStatus.CREATED);
+	public ResponseEntity<GunDTO> add(@RequestBody GunRequest request){
+		return new ResponseEntity<GunDTO>(service.addGun(request),HttpStatus.CREATED);
 	}
 	
+	//get gun list
+	@Operation(summary = "Get all gun", responses = {
+			@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GunDTO.class), mediaType = "application/json")) })
 	@GetMapping
-	public ResponseEntity<List<Gun>> getAll(){
-		return new ResponseEntity<List<Gun>>(service.getAll(),HttpStatus.OK);
+	public ResponseEntity<List<GunDTO>> getAll(){
+		return new ResponseEntity<List<GunDTO>>(service.getAll(),HttpStatus.OK);
 	}
 	
+	//get gun by id
+	@Operation(summary = "Get gun by id", responses = {
+			@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = GunDTO.class), mediaType = "application/json")) })
 	@GetMapping("/{id}")
-	public ResponseEntity<Gun> getById(@PathVariable Integer id){
-		return new ResponseEntity<Gun>(service.getOne(id),HttpStatus.OK);
+	public ResponseEntity<GunDTO> getById(@PathVariable Integer id){
+		return new ResponseEntity<GunDTO>(service.getOne(id),HttpStatus.OK);
 	}
 }

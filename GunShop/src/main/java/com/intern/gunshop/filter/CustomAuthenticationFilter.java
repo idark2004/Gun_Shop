@@ -55,6 +55,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 		response.setHeader("Authorization", "Bearer " + access_token);
 		Map<String, String> token = new HashMap<String, String>();
 		token.put("access_token", access_token);
+		token.put("email", user.getUsername());
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		
 		new ObjectMapper().writeValue(response.getOutputStream(), token);

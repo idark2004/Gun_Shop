@@ -20,11 +20,13 @@ import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Schema(hidden = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,15 +42,15 @@ public class Users {
 	private Timestamp created_date;
 	private boolean user_status;
 
-	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+	@JsonIgnore
+	@ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
 	@JoinTable(name = "user_role",
 				joinColumns = {
 						@JoinColumn(name = "user_id")
 				},
 				inverseJoinColumns = {
 						@JoinColumn(name = "role_id")
-				})
-	@JsonIgnore
+				})	
 	private Collection<Role> roles = new ArrayList<Role>();
 
 	@OneToMany(mappedBy = "user")

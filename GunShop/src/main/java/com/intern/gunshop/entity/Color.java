@@ -10,43 +10,22 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
+@Data
+@NoArgsConstructor
 public class Color {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int color_id;
 	
 	private String color_name;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "color")
 	private Set<Gun_Color> gun_list;
-	
-	public Color() {}
-
-	public int getColor_id() {
-		return color_id;
-	}
-
-	public void setColor_id(int color_id) {
-		this.color_id = color_id;
-	}
-
-	public String getColor_name() {
-		return color_name;
-	}
-
-	public void setColor_name(String color_name) {
-		this.color_name = color_name;
-	}
-
-	@JsonIgnore
-	public Set<Gun_Color> getGun_list() {
-		return gun_list;
-	}
-
-	public void setGun_list(Set<Gun_Color> gun_list) {
-		this.gun_list = gun_list;
-	}
 		
 }

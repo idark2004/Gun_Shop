@@ -28,8 +28,8 @@ public class Role {
 	@Column(unique = true)
 	private String role_name;
 
-	@ManyToMany(mappedBy = "roles", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JsonIgnore
+	@ManyToMany(mappedBy = "roles", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
 	private Collection<Users> users = new ArrayList<Users>();
 
 }

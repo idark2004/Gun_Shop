@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.intern.gunshop.dto.UserDTO;
-import com.intern.gunshop.entity.Users;
 import com.intern.gunshop.exception.ApiException;
 import com.intern.gunshop.request.UserRequest;
 import com.intern.gunshop.service.UserService;
@@ -58,7 +57,7 @@ public class UserController {
 	// Add new User
 	@Operation(summary = "Create new user", responses = {
 			@ApiResponse(responseCode = "201", content = @Content(schema = @Schema(implementation = UserDTO.class), mediaType = "application/json"), description = "Create new user and save to database successfully") })
-	@PostMapping("/save")
+	@PostMapping()
 	public ResponseEntity<UserDTO> add(@RequestBody UserRequest user) {
 		UserDTO dto = service.addUser(user);
 		
@@ -69,9 +68,9 @@ public class UserController {
 	@Operation(summary = "Update a user", responses = {
 			@ApiResponse(responseCode = "202", content = @Content(schema = @Schema(implementation = UserRequest.class), mediaType = "application/json"), description = "Update user to database successfully") })
 	@PutMapping("/{id}")
-	public ResponseEntity<UserRequest> update(@RequestBody UserRequest request, @PathVariable Integer id) {			
-			UserRequest updatedUser = service.updateUser(request,id);
-			return new ResponseEntity<UserRequest>(updatedUser, HttpStatus.ACCEPTED);		
+	public ResponseEntity<UserDTO> update(@RequestBody UserRequest request, @PathVariable Integer id) {			
+			UserDTO updatedUser = service.updateUser(request,id);
+			return new ResponseEntity<UserDTO>(updatedUser, HttpStatus.ACCEPTED);		
 	}
 
 	
@@ -110,8 +109,13 @@ public class UserController {
 		return new ResponseEntity<UserDTO>(service.addRoleToUser(id, roleName),HttpStatus.ACCEPTED);
 	}
 	
+	//Get user by email
+	@Operation(summary = "Get user by email", responses = {
+			@ApiResponse(responseCode = "202", content = 
+						@Content(schema = @Schema(implementation = UserDTO.class), 
+						mediaType = "application/json"))})
 	@GetMapping("/email/{email}")
-	public Users getByEmail(@PathVariable String email) {
+	public UserDTO getByEmail(@PathVariable String email) {
 		return service.getByEmail(email);
 	}
 }

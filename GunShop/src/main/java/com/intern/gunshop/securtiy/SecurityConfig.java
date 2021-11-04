@@ -37,12 +37,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
 		customAuthenticationFilter.setFilterProcessesUrl("/api/login");
 		http.csrf().disable();
+		http.cors();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.authorizeRequests().antMatchers("/swagger-ui.html").permitAll();
 		http.authorizeRequests().antMatchers("/swagger-ui/**").permitAll();
 		http.authorizeRequests().antMatchers("/v3/**").permitAll();
 		http.authorizeRequests().antMatchers("/api/login/**").permitAll();
-		http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/user/save").permitAll();
+		http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/user").permitAll();
 		http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/user/{id}").hasAnyAuthority("USER");
 		http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/user/{user_id}/status").hasAnyAuthority("ADMIN");
 		http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/user/changed-role/**").hasAnyAuthority("ADMIN");

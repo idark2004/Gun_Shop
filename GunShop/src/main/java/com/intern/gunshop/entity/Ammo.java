@@ -34,7 +34,7 @@ public class Ammo {
 	private Timestamp modified_date;
 	private boolean ammo_status;
 
-	@OneToMany(mappedBy = "ammo",cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "ammo",cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
 	@JsonIgnore
 	private Set<Gun> gun_list;
 
