@@ -1,7 +1,5 @@
 package com.intern.gunshop.service;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,6 +23,8 @@ import com.intern.gunshop.mapper.UserMapper;
 import com.intern.gunshop.repository.RoleRepository;
 import com.intern.gunshop.repository.UserRepository;
 import com.intern.gunshop.request.UserRequest;
+import com.intern.gunshop.util.GetTime;
+import com.intern.gunshop.util.Validator;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -41,15 +41,16 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	//load user for authorization
+	// load user for authorization
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		Validator.checkMailFormat(email);
 		Users user = repo.findByEmail(email);
 		if (user == null) {
 			throw new ApiRequestException("No such user with email!", HttpStatus.NOT_FOUND);
 		}
 		Collection<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-		user.getRoles().forEach(role ->{
+		user.getRoles().forEach(role -> {
 			authorities.add(new SimpleGrantedAuthority(role.getRole_name()));
 		});
 		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPass_word(),
@@ -61,6 +62,9 @@ public class UserService implements UserDetailsService {
 	public List<UserDTO> getUserList() {
 		List<Users> userList = repo.findAll();
 		List<UserDTO> dtoList = new ArrayList<UserDTO>();
+		if (userList == null) {
+			throw new ApiRequestException("No user found in database", HttpStatus.NOT_FOUND);
+		}
 		for (Users user : userList) {
 			UserDTO dto = mapper.entityToDto(user);
 			addRoleNameToDTO(user, dto);
@@ -71,15 +75,16 @@ public class UserService implements UserDetailsService {
 
 	// add a new user
 	public UserDTO addUser(UserRequest user) {
-		LocalDateTime now = LocalDateTime.now();
-		Timestamp created_date = Timestamp.valueOf(now);
 		Role role = roleRepo.findById(2).get();
 		Users newUser = new Users();
+		Validator.checkMailFormat(user.email);
+		Validator.checkPasswordLength(user.pass_word);
+		Validator.checkName(user.user_name);
 		newUser.setUser_name(user.user_name);
 		newUser.setEmail(user.email);
 		newUser.setPass_word(passwordEncoder.encode(user.pass_word));
 		newUser.setBirth_date(user.birth_date);
-		newUser.setCreated_date(created_date);
+		newUser.setCreated_date(GetTime.getTimestamp());
 		newUser.setUser_status(true);
 		newUser.getRoles().add(role);
 		repo.save(newUser);
@@ -91,6 +96,7 @@ public class UserService implements UserDetailsService {
 
 	// update an existing user
 	public UserDTO updateUser(UserRequest request, Integer user_id) {
+		Validator.checkName(request.user_name);
 		Users savedUser = repo.findById(user_id).get();
 		savedUser = mapper.requestToEntity(request, savedUser);
 		repo.save(savedUser);
@@ -101,7 +107,7 @@ public class UserService implements UserDetailsService {
 	// get a user based on role id
 	public List<UserDTO> getUserByRoleId(Integer role_id) {
 		List<Users> userList = repo.getByRoleId(role_id);
-		if (userList.size() < 1) {
+		if (userList == null) {
 			throw new ApiRequestException("No users with role Id : " + role_id, HttpStatus.BAD_REQUEST);
 		}
 		List<UserDTO> dtoList = new ArrayList<UserDTO>();
@@ -117,6 +123,9 @@ public class UserService implements UserDetailsService {
 	// get user based on user id
 	public UserDTO getUser(Integer user_id) {
 		Users user = repo.findById(user_id).get();
+		if(user == null) {
+			throw new ApiRequestException("No user with the id : " + user_id, HttpStatus.NOT_FOUND);
+		}
 		UserDTO dto = mapper.entityToDto(user);
 		addRoleNameToDTO(user, dto);
 		return dto;
@@ -125,6 +134,9 @@ public class UserService implements UserDetailsService {
 	// change user's status
 	public UserDTO changeState(Integer user_id) {
 		Users user = repo.findById(user_id).get();
+		if(user == null) {
+			throw new ApiRequestException("No user with the id : " + user_id, HttpStatus.NOT_FOUND);
+		}
 		boolean newState = !user.isUser_status();
 		user.setUser_status(newState);
 		repo.save(user);
@@ -138,6 +150,9 @@ public class UserService implements UserDetailsService {
 	@Transactional
 	public UserDTO addRoleToUser(Integer user_id, String role_name) {
 		Users user = repo.findById(user_id).get();
+		if(user == null) {
+			throw new ApiRequestException("No user with the id : " + user_id, HttpStatus.NOT_FOUND);
+		}
 		Role role = roleRepo.findByRole_name(role_name);
 		user.getRoles().add(role);
 //		repo.save(user);
@@ -145,19 +160,20 @@ public class UserService implements UserDetailsService {
 		addRoleNameToDTO(user, dto);
 		return dto;
 	}
-	
-	//Get user by email
+
+	// Get user by email
 	@Transactional
 	public UserDTO getByEmail(String email) {
+		Validator.checkMailFormat(email);
 		Users user = repo.findByEmail(email);
 		UserDTO dto = mapper.entityToDto(user);
 		addRoleNameToDTO(user, dto);
 		return dto;
 	}
-	
+
 	// mapping role_name from entity to dto
-	public void addRoleNameToDTO(Users user, UserDTO dto){
-		user.getRoles().forEach(role ->{
+	public void addRoleNameToDTO(Users user, UserDTO dto) {
+		user.getRoles().forEach(role -> {
 			dto.getRole_name().add(role.getRole_name());
 		});
 	}

@@ -17,7 +17,6 @@ import com.intern.gunshop.dto.UserDTO;
 import com.intern.gunshop.exception.ApiException;
 import com.intern.gunshop.request.UserRequest;
 import com.intern.gunshop.service.UserService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
