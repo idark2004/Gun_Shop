@@ -9,4 +9,7 @@ import com.intern.gunshop.entity.Cart_Detail;
 public interface CartDetailRepository extends JpaRepository<Cart_Detail, Integer>{
 	@Query("SELECT de FROM Cart_Detail de INNER JOIN de.cart c WHERE c.cart_id = ?1")
 	public List<Cart_Detail> findByCartId(Integer cart_id);
+	
+	@Query("SELECT SUM(cd.cart_price) FROM Cart_Detail cd INNER JOIN cd.cart c WHERE c.cart_id = ?1")
+	public int totalPriceOfCart(Integer cart_id);
 }

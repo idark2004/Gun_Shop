@@ -16,7 +16,6 @@ public interface GunMapper {
 	
 	//map request to entity ( update existing gun )
 	@Mapping(target = "gun_name" , source = "request.gun_name" , nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-	@Mapping(target = "capacity" , source = "request.capacity" , nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 	@Mapping(target = "gun_description" , source = "request.gun_description" , nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 	@Mapping(target = "gun_image" , source = "request.gun_image" , nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 	public Gun requestToEntityUpdate(GunRequest request, @MappingTarget Gun Gun);

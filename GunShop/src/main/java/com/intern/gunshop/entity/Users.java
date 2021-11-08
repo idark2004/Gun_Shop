@@ -58,6 +58,10 @@ public class Users {
 	private Set<Gun_Rating> gun_rating;
 
 	@OneToOne(mappedBy = "user")
-	private Cart cart;	
+	private Cart cart;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "users")
+	private Set<Orders> orders;
 
 }

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +24,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/gun")
+@RequestMapping("/api/gun")
 @Tag(name = "Gun")
 public class GunController {
 	
@@ -52,5 +53,23 @@ public class GunController {
 	@GetMapping("/{id}")
 	public ResponseEntity<GunDTO> getById(@PathVariable Integer id){
 		return new ResponseEntity<GunDTO>(service.getOne(id),HttpStatus.OK);
+	}
+	
+	//update existing gun
+	@Operation(summary = "Update existing gun", responses = {
+			@ApiResponse(responseCode = "202", content = @Content(schema = @Schema(implementation = GunDTO.class), mediaType = "application/json")) })
+	@PutMapping("/updated-gun/{id}")
+	public ResponseEntity<GunDTO> update(@RequestBody GunRequest request, @PathVariable Integer id){
+		GunDTO dto = service.update(request, id);
+		return new ResponseEntity<GunDTO>(dto,HttpStatus.ACCEPTED);
+	}
+	
+	//Change gun status
+	@Operation(summary = "Change gun status", responses = {
+			@ApiResponse(responseCode = "202", content = @Content(schema = @Schema(implementation = GunDTO.class), mediaType = "application/json")) })
+	@PutMapping("/status/{id}")
+	public ResponseEntity<GunDTO> changeStatus(@PathVariable Integer id){
+		GunDTO dto = service.changeStatus(id);
+		return new ResponseEntity<GunDTO>(dto,HttpStatus.ACCEPTED);
 	}
 }

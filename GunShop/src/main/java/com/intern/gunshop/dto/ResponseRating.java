@@ -5,6 +5,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ResponseMessage {
-	private String message;
+public class ResponseRating {
+	private double rate;
 }

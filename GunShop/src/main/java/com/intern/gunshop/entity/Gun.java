@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,9 +37,11 @@ public class Gun {
 	private Timestamp added_date;
 	private Timestamp modified_date;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "gun", cascade = CascadeType.MERGE)
 	private Set<Gun_Rating> gun_rating;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "colored_gun", cascade = CascadeType.MERGE)
 	private Set<Gun_Color> color_list;
 

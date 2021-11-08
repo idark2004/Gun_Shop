@@ -1,5 +1,7 @@
 package com.intern.gunshop.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -9,4 +11,7 @@ public interface GunRatingRepository extends JpaRepository<Gun_Rating, Integer> 
 	
 	@Query("SELECT AVG(r.rated_point) FROM Gun_Rating r JOIN r.gun g WHERE g.gun_id = ?1")
 	public String averageRateOfGun(Integer gun_id);
+	
+	@Query("SELECT r FROM Gun_Rating r JOIN r.gun g WHERE g.gun_id = ?1")
+	public List<Gun_Rating> getAllRatingOfGun(Integer id);
 }

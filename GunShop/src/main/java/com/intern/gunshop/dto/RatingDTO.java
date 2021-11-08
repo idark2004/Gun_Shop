@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ResponseMessage {
-	private String message;
+public class RatingDTO {
+
+	private String gun_name;
+	private String user_name;
+	private int rate_point;
 }
