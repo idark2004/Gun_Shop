@@ -9,11 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.intern.gunshop.dto.GunDTO;
-import com.intern.gunshop.entity.Ammo;
 import com.intern.gunshop.entity.Category;
 import com.intern.gunshop.entity.Gun;
 import com.intern.gunshop.mapper.GunMapper;
-import com.intern.gunshop.repository.AmmoRepository;
 import com.intern.gunshop.repository.CategoryRepository;
 import com.intern.gunshop.repository.GunRepository;
 import com.intern.gunshop.request.GunRequest;
@@ -30,9 +28,6 @@ public class GunService {
 	private CategoryRepository cateRepo;
 
 	@Autowired
-	private AmmoRepository ammoRepo;
-
-	@Autowired
 	private GunMapper mapper;
 
 	// create new gun
@@ -47,18 +42,14 @@ public class GunService {
 		// If all pass then start processing data
 		Category cate = cateRepo.findById(request.getCategory_id()).get();
 
-		Ammo ammo = ammoRepo.findById(request.getAmmo_id()).get();
-
 		Gun newGun = mapper.requestToEntityCreate(request);
 
 		newGun.setCategory(cate);
-		newGun.setAmmo(ammo);
 		newGun.setGun_status(true);
 		newGun.setAdded_date(GetTime.getTimestamp());
 		newGun.setModified_date(GetTime.getTimestamp());
 		gunRepo.save(newGun);
 		GunDTO dto = mapper.entityToDTO(newGun);
-		dto.setAmmo_id(newGun.getAmmo().getAmmo_id());
 		dto.setCategory_id(newGun.getCategory().getCategory_id());
 		return dto;
 	}
@@ -70,7 +61,6 @@ public class GunService {
 		List<Gun> gunList = gunRepo.findAll();
 		for (Gun gun : gunList) {
 			GunDTO dto = mapper.entityToDTO(gun);
-			dto.setAmmo_id(gun.getAmmo().getAmmo_id());
 			dto.setCategory_id(gun.getCategory().getCategory_id());
 			dtoList.add(dto);
 		}
@@ -82,7 +72,6 @@ public class GunService {
 		GunDTO dto = new GunDTO();
 		Gun gun = gunRepo.findById(id).get();
 		dto = mapper.entityToDTO(gun);
-		dto.setAmmo_id(gun.getAmmo().getAmmo_id());
 		dto.setCategory_id(gun.getCategory().getCategory_id());
 		return dto;
 	}
@@ -98,13 +87,11 @@ public class GunService {
 
 		// If all pass then start processing data
 		Gun gun = gunRepo.findById(id).get();
-		request.setAmmo_id(gun.getAmmo().getAmmo_id());
 		request.setCategory_id(gun.getCategory().getCategory_id());
 		Gun updatedGun = mapper.requestToEntityUpdate(request, gun);
 		updatedGun.setModified_date(GetTime.getTimestamp());
 		gunRepo.save(updatedGun);
 		GunDTO dto = mapper.entityToDTO(updatedGun);
-		dto.setAmmo_id(updatedGun.getAmmo().getAmmo_id());
 		dto.setCategory_id(updatedGun.getCategory().getCategory_id());
 		return dto;
 	}
@@ -117,7 +104,6 @@ public class GunService {
 		gun.setModified_date(GetTime.getTimestamp());
 		gunRepo.save(gun);
 		GunDTO dto = mapper.entityToDTO(gun);
-		dto.setAmmo_id(gun.getAmmo().getAmmo_id());
 		dto.setCategory_id(gun.getCategory().getCategory_id());
 		return dto;
 	}

@@ -35,6 +35,10 @@ public class Gun_Color {
 	@OneToMany(mappedBy = "guns")
 	@JsonIgnore
 	private Set<Cart_Detail> cart;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "item")
+	private Set<Order_Detail> orders;
 
 	private int quantity;
 	private boolean is_having;

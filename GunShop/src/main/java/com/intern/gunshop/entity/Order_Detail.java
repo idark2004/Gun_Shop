@@ -1,17 +1,11 @@
 package com.intern.gunshop.entity;
 
-import java.sql.Timestamp;
-import java.util.Set;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,22 +13,20 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-public class Orders {
+public class Order_Detail {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int order_id;
+	private int detail_id;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private Users users;
+	@JoinColumn(name = "colored_id")
+	private Gun_Color item ;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy = "order")
-	private Set<Order_Detail> details;
+	@ManyToOne
+	@JoinColumn(name = "order_id")
+	private Orders order;
 	
-	private Timestamp ordered_date;
-	private int total_price;
-	private String order_status;
-	
+	private int order_quantity;
+	private int order_total;
 }

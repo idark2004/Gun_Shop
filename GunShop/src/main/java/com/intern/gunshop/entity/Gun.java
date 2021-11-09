@@ -46,10 +46,6 @@ public class Gun {
 	private Set<Gun_Color> color_list;
 
 	@ManyToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "ammo_id")
-	private Ammo ammo;
-
-	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "category_id")
 	private Category category;
 

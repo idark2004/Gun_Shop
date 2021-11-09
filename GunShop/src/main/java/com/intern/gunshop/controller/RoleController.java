@@ -20,7 +20,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/role")
+@RequestMapping("/api/role")
 @Tag(name = "Role")
 public class RoleController {
 

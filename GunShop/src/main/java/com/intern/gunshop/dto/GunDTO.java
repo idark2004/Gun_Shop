@@ -17,7 +17,6 @@ public class GunDTO {
 	private String gun_image;
 	private boolean gun_status;
 	private int gun_price;
-	private Integer ammo_id;
 	private Integer category_id;
 	private Timestamp added_date;
 	private Timestamp modified_date;
