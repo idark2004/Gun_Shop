@@ -5,9 +5,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import com.intern.gunshop.dto.UserRequest;
+import com.intern.gunshop.dto.UserDTO;
 import com.intern.gunshop.entity.Users;
-import com.intern.gunshop.service.UserDTO;
+import com.intern.gunshop.request.UserRequest;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

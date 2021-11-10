@@ -1,16 +1,10 @@
 package com.intern.gunshop.dto;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
 public class ResponseMessage {
-	private String msg;
-	
-	public ResponseMessage() {}
-
-	public String getMsg() {
-		return msg;
-	}
-
-	public void setMsg(String msg) {
-		this.msg = msg;
-	}
-	
+	private String message;
 }

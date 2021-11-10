@@ -13,13 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.intern.gunshop.dto.UserRequest;
-import com.intern.gunshop.entity.Users;
+import com.intern.gunshop.dto.UserDTO;
 import com.intern.gunshop.exception.ApiException;
-import com.intern.gunshop.mapper.UserMapper;
-import com.intern.gunshop.service.UserDTO;
+import com.intern.gunshop.request.UserRequest;
 import com.intern.gunshop.service.UserService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,22 +24,20 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @Tag(name = "User")
 public class UserController {
 
 	@Autowired
 	private UserService service;
 
-	@Autowired
-	private UserMapper mapper;
 
 	// Get List User
 	@Operation(summary = "Get all users", responses = {
-			@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Users.class), mediaType = "application/json"), description = "Return all user's information") })
-	@GetMapping()
-	public List<UserDTO> list() {
-		return service.getUserList();
+			@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserDTO.class), mediaType = "application/json"), description = "Return all user's information") })
+	@GetMapping("/all")
+	public ResponseEntity<List<UserDTO>> list() {
+		return new ResponseEntity<List<UserDTO>>(service.getUserList(),HttpStatus.OK);
 	}
 
 	// Get user by Role Id
@@ -63,10 +58,8 @@ public class UserController {
 			@ApiResponse(responseCode = "201", content = @Content(schema = @Schema(implementation = UserDTO.class), mediaType = "application/json"), description = "Create new user and save to database successfully") })
 	@PostMapping()
 	public ResponseEntity<UserDTO> add(@RequestBody UserRequest user) {
-		Users newUser = service.addUser(user);
-		UserDTO dto = mapper.entityToDto(newUser);
-		dto.setRole_name(newUser.getRole().getRole_name());
-		dto.setUser_id(newUser.getUser_id());
+		UserDTO dto = service.addUser(user);
+		
 		return new ResponseEntity<UserDTO>(dto, HttpStatus.CREATED);
 	}
 
@@ -74,9 +67,9 @@ public class UserController {
 	@Operation(summary = "Update a user", responses = {
 			@ApiResponse(responseCode = "202", content = @Content(schema = @Schema(implementation = UserRequest.class), mediaType = "application/json"), description = "Update user to database successfully") })
 	@PutMapping("/{id}")
-	public ResponseEntity<UserRequest> update(@RequestBody UserRequest request, @PathVariable Integer id) {			
-			UserRequest updatedUser = service.updateUser(request,id);
-			return new ResponseEntity<UserRequest>(updatedUser, HttpStatus.ACCEPTED);		
+	public ResponseEntity<UserDTO> update(@RequestBody UserRequest request, @PathVariable Integer id) {			
+			UserDTO updatedUser = service.updateUser(request,id);
+			return new ResponseEntity<UserDTO>(updatedUser, HttpStatus.ACCEPTED);		
 	}
 
 	
@@ -101,5 +94,27 @@ public class UserController {
 	@GetMapping("/{id}")
 	public UserDTO getById(@PathVariable Integer id) {
 		return service.getUser(id);
+	}
+	
+	//add role to user
+	@Operation(summary = "Add role to user", responses = {
+			@ApiResponse(responseCode = "202", content = 
+						@Content(schema = @Schema(implementation = UserDTO.class), 
+						mediaType = "application/json"), 
+			description = "User's role changed successfully")})
+	@PutMapping("/changed-role/{id}/{roleName}")
+	public ResponseEntity<UserDTO> changeRole(@PathVariable Integer id,
+												@PathVariable String roleName){
+		return new ResponseEntity<UserDTO>(service.addRoleToUser(id, roleName),HttpStatus.ACCEPTED);
+	}
+	
+	//Get user by email
+	@Operation(summary = "Get user by email", responses = {
+			@ApiResponse(responseCode = "202", content = 
+						@Content(schema = @Schema(implementation = UserDTO.class), 
+						mediaType = "application/json"))})
+	@GetMapping("/email/{email}")
+	public UserDTO getByEmail(@PathVariable String email) {
+		return service.getByEmail(email);
 	}
 }

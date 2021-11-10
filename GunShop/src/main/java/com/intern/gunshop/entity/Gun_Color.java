@@ -12,69 +12,34 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
+@Data
+@NoArgsConstructor
 public class Gun_Color {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int colored_id;
 
-	@ManyToOne	
+	@ManyToOne
 	@JoinColumn(name = "color_id")
 	private Color color;
 
-	@ManyToOne	
+	@ManyToOne
 	@JoinColumn(name = "gun_id")
 	private Gun colored_gun;
-	
+
 	@OneToMany(mappedBy = "guns")
 	@JsonIgnore
 	private Set<Cart_Detail> cart;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "item")
+	private Set<Order_Detail> orders;
 
 	private int quantity;
-
-	public Gun_Color() {
-	}
-
-	public int getColored_id() {
-		return colored_id;
-	}
-
-	public void setColored_id(int colored_id) {
-		this.colored_id = colored_id;
-	}
-
-	public Color getColor() {
-		return color;
-	}
-
-	public void setColor(Color color) {
-		this.color = color;
-	}
-
-	public Gun getColored_gun() {
-		return colored_gun;
-	}
-
-	public void setColored_gun(Gun colored_gun) {
-		this.colored_gun = colored_gun;
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-	
-	public Set<Cart_Detail> getCart() {
-		return cart;
-	}
-
-	public void setCart(Set<Cart_Detail> cart) {
-		this.cart = cart;
-	}
-
-	
+	private boolean is_having;
 }

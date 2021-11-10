@@ -1,5 +1,7 @@
 package com.intern.gunshop.entity;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,4 +30,6 @@ public class Cart_Detail {
 	private Gun_Color guns;
 	
 	private int cart_quantity;
+	private int cart_price;
+	private Timestamp created_date;
 }

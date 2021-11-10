@@ -2,21 +2,34 @@ package com.intern.gunshop.entity;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
+@Schema(hidden = true)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Users {
 
 	@Id
@@ -29,9 +42,16 @@ public class Users {
 	private Timestamp created_date;
 	private boolean user_status;
 
-	@ManyToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "role_id", referencedColumnName = "role_id")
-	private Role role;
+	@JsonIgnore
+	@ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
+	@JoinTable(name = "user_role",
+				joinColumns = {
+						@JoinColumn(name = "user_id")
+				},
+				inverseJoinColumns = {
+						@JoinColumn(name = "role_id")
+				})	
+	private Collection<Role> roles = new ArrayList<Role>();
 
 	@OneToMany(mappedBy = "user")
 	@JsonIgnore
@@ -39,89 +59,9 @@ public class Users {
 
 	@OneToOne(mappedBy = "user")
 	private Cart cart;
-
-	public Users() {
-	}
-
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
-	public int getUser_id() {
-		return user_id;
-	}
-
-	public void setUser_id(int user_id) {
-		this.user_id = user_id;
-	}
-
-	public String getUser_name() {
-		return user_name;
-	}
-
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public LocalDate getBirth_date() {
-		return birth_date;
-	}
-
-	public void setBirth_date(LocalDate birth_date) {
-		this.birth_date = birth_date;
-	}
-
-	public Timestamp getCreated_date() {
-		return created_date;
-	}
-
-	public void setCreated_date(Timestamp created_date) {
-		this.created_date = created_date;
-	}
-
-	public boolean isUser_status() {
-		return user_status;
-	}
-
-	public void setUser_status(boolean user_status) {
-		this.user_status = user_status;
-	}
-
-	public String getPass_word() {
-		return pass_word;
-	}
-
-	public void setPass_word(String pass_word) {
-		this.pass_word = pass_word;
-	}
-
 	
-	public Set<Gun_Rating> getGun_rating() {
-		return gun_rating;
-	}
-
-	public void setGun_rating(Set<Gun_Rating> gun_rating) {
-		this.gun_rating = gun_rating;
-	}
-
-	public Cart getCart() {
-		return cart;
-	}
-
-	public void setCart(Cart cart) {
-		this.cart = cart;
-	}
+	@JsonIgnore
+	@OneToMany(mappedBy = "users")
+	private Set<Orders> orders;
 
 }

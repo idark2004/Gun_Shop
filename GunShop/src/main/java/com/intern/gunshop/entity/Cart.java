@@ -12,9 +12,11 @@ import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Data
 @NoArgsConstructor
 public class Cart {
 
@@ -30,30 +32,5 @@ public class Cart {
 	@OneToMany(mappedBy = "cart")
 	@JsonIgnore
 	private Set<Cart_Detail> detail;
-
-	public int getCart_id() {
-		return cart_id;
-	}
-
-	public Users getUser() {
-		return user;
-	}
-
-	
-	public Set<Cart_Detail> getDetail() {
-		return detail;
-	}
-
-	public void setCart_id(int cart_id) {
-		this.cart_id = cart_id;
-	}
-
-	public void setUser(Users user) {
-		this.user = user;
-	}
-
-	public void setDetail(Set<Cart_Detail> detail) {
-		this.detail = detail;
-	}
 
 }
