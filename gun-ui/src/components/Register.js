@@ -1,6 +1,7 @@
 
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import moment from 'moment';
 
 
 function Register() {
@@ -32,11 +33,16 @@ function Register() {
             birth_date : user.birth_date
         }).then((response) =>{
             console.log(response)
+            window.location ='/login'
         })
     }
     return (
-        <div className="form-control">
-            <form onSubmit={e => submitHandle(e)}>
+        <div className="form-control flex-container center" style={{
+            width : "80vw",
+            margin : "auto",
+            marginTop : "6%"
+        }}>
+            <form className="flex-item" onSubmit={e => submitHandle(e)}>
                 <div className="row">
                     <div className="col-sm">                    
                     <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
@@ -50,7 +56,7 @@ function Register() {
                     <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
                     </div>
                     <div className="col-sm">
-                    <input type="password" className="form-control" name="password" id="exampleInputPassword1" value={user.password} onChange={handleChange} />
+                    <input type="password" className="form-control" minLength = "4" maxLength = "8" name="password" id="exampleInputPassword1" value={user.password} onChange={handleChange} />
                     </div>
                 </div>
                 <div className="row">
@@ -58,7 +64,7 @@ function Register() {
                     <label htmlFor="inputUserName" className="form-label">User Name</label>
                     </div>
                     <div className="col-sm">
-                    <input type="text" className="form-control" name="username" id="inputUserName" value={user.username} onChange={handleChange} />
+                    <input type="text" className="form-control" name="username" pattern ="[A-Za-z]{2,}" title="Name need to have at least 2 characters" id="inputUserName" value={user.username} onChange={handleChange} />
                     </div>
                 </div>
                 <div className="row">
@@ -66,7 +72,7 @@ function Register() {
                     <label htmlFor="inputBirthDate" className="form-label">Birth Date</label>
                     </div>
                     <div className="col-sm">
-                    <input type="date" className="form-control" name="birth_date" id="inputBirthDate" value={user.birth_date} onChange={handleChange} />
+                    <input type="date" className="form-control" name="birth_date" id="inputBirthDate"  maxdate={moment().format("MM-DD-YYYY")} value={user.birth_date} onChange={handleChange} />
                     </div>
                 </div>
 

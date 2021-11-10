@@ -1,6 +1,6 @@
 package com.intern.gunshop.controller;
 
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,9 +61,9 @@ public class GunRatingController {
 	@Operation(summary = "Get all rating", responses = {
 			@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = RatingDTO.class), mediaType = "application/json")) })
 	@GetMapping()
-	public ResponseEntity<Map<String, String>> getAllRating(@RequestParam Integer gun_id){
-		Map<String, String> ratingList = service.getAllRating(gun_id);
-		return new ResponseEntity<Map<String,String>>(ratingList,HttpStatus.OK);
+	public ResponseEntity<List<RatingDTO>> getAllRating(@RequestParam Integer gun_id){
+		List<RatingDTO> ratingList = service.getAllRating(gun_id);
+		return new ResponseEntity<List<RatingDTO>>(ratingList,HttpStatus.OK);
 	}
 	
 	//Delete rating

@@ -1,9 +1,8 @@
 package com.intern.gunshop.service;
 
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -51,11 +50,15 @@ public class GunRatingService {
 	}
 	
 	//Get all rating of a gun
-	public Map<String, String> getAllRating(Integer id){
-		Map<String, String> rateList = new HashMap<String, String>();
+	public List<RatingDTO> getAllRating(Integer id){
+		List<RatingDTO> rateList = new ArrayList<RatingDTO>();
 		List<Gun_Rating> list = rateRepo.getAllRatingOfGun(id);
 		for(Gun_Rating rate : list) {
-			rateList.put(rate.getUser().getUser_name(), String.valueOf(rate.getRated_point()));
+				RatingDTO dto = new RatingDTO();
+				dto.setRate_point(rate.getRated_point());
+				dto.setUser_name(rate.getUser().getUser_name());
+				dto.setGun_name(rate.getGun().getGun_name());
+				rateList.add(dto);
 		}
 		return rateList;
 	}

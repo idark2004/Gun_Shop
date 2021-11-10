@@ -30,6 +30,7 @@ function Login() {
         }).then((response) => {
             console.log(response)
             alert('Login successfull');
+            sessionStorage.setItem('Email', user.email)
             localStorage.setItem('Authorization', response.data.access_token);
             window.location='http://localhost:3000/';
 
@@ -39,7 +40,11 @@ function Login() {
         })
     }
     return (
-        <div>
+        <div style={{
+            width : "60vw",
+            margin : "auto",
+            marginTop : "6%"
+        }}>
             <form onSubmit={e => handleSubmit(e)}>
                 <div className="form-group row">
 
@@ -53,7 +58,7 @@ function Login() {
 
                     <label htmlFor="inputPassword" className="col-sm-2 col-form-label">Password</label>
                     <div className='col-sm-10'>
-                        <input type="password" className="form-control" name="password" id="inputPassword" value={user.password} onChange={handleChange} />
+                        <input type="password" className="form-control" name="password" minLength = "4" maxLength = "8" id="inputPassword" value={user.password} onChange={handleChange} />
                     </div>
 
                 </div>

@@ -1,0 +1,22 @@
+.content{
+    margin : auto;
+    padding-top: 10%;
+    height: 100vh;
+    text-align: center;
+    background-image: url(/src/components/images/background.jfif);
+    background-size: cover;
+}
+#welcome{
+    font-family: 'Times New Roman', Times, serif;
+    background-color: rgb(135, 165, 79);
+    width: fit-content;
+    margin: auto;
+    padding: 0 4% 0;
+    color: aqua;
+    font-size: 40px;
+}
+
+#bt{
+    margin-top: 2%;
+    font-size: 20px;
+}
